@@ -11,4 +11,4 @@
 (defn- fib-pair [[a b]] [b (+ a b)])
 
 (defn fibonacci-ver2 [n]
-  (nth (map first (iterate fib-pair [1 1])) n))
+  (nth (map first (iterate fib-pair [1 1])) (- n 1)))
