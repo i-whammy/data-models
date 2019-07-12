@@ -20,5 +20,10 @@
        (fact "when argument is 3, return sum of results of fibonacci 1 and fibonacci 2"
              (sut/fibonacci-ver2 3) => 2)
        (fact "is able to return answer for such a big value"
-             (sut/fibonacci-ver2 50) => 12586269025))
+             (sut/fibonacci-ver2 50) => 12586269025)
+       (fact "when argument is less than 1, return 0"
+             (sut/fibonacci-ver2 0) => 0
+             (sut/fibonacci-ver2 -111) => 0))
 
+
+(facts "factorial")
