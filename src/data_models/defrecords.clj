@@ -10,8 +10,3 @@
 (deftype SadnessExpression [word]
   Expression
   (out [this] (str word ".....")))
-
-(out (SadnessExpression. "hogehoge"))
-(out (AngerExpression. "hogehoge"))
-
-
