@@ -1,6 +1,6 @@
 (ns data-models.sleeping-barber)
 
-;; (defrecord Barber [queue count open-time])
+(defrecord Barber [queue count open-time])
 
 (def barber {:queue (atom 0)
              :count (agent 0)
@@ -12,12 +12,12 @@
   (not (= 3 (:queue shop))))
 
 (defn give-haircut [shop]
-  (swap! (:queue shop) dec)
+  (assoc shop :queue (swap! (:queue shop) dec))
   (Thread/sleep 20)
-  (send (:count shop) inc))
+  (assoc shop :count (send (:count shop) inc)))
 
 (defn add-customer [shop]
-  (swap! (:queue shop) inc)
+  (assoc shop :queue (swap! (:queue shop) inc))
   (give-haircut shop))
 
 (defn is-open? [shop start-time]
@@ -25,7 +25,8 @@
 
 (defn shop-open [shop]
   (loop [start-time (now)]
-    (if (is-open? shop start-time)
+    (if (not (is-open? shop start-time))
+      @(:count shop)
       (do
         (Thread/sleep (+ 10 (rand 21)))
         (if (is-queue-available? shop)
@@ -33,9 +34,9 @@
         (recur start-time)))))
 
 (defn main[]
-  (future
-    (shop-open barber)
-    (Thread/sleep (:open-time barber)))
-  @(:count barber))
+  (let [shop (Barber. (atom 0) (agent 0) (* 10 1000))]
+    (shop-open shop)
+    (Thread/sleep (:open-time shop))
+    @(:count shop)))
 
 (main)
